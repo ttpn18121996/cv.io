@@ -49,9 +49,9 @@
   }
 
   function renderable(section) {
-    const callback = _config.render?.[section]?.callback;
+    const handle = _config.render?.[section]?.handle;
 
-    return callback && typeof callback === 'function';
+    return handle && typeof handle === 'function';
   }
 
   function handleEffect(section, element) {
@@ -64,7 +64,7 @@
 
     switch (effect) {
       case 'auto_type':
-        autoType(element, options);
+        autoType(section, element, options);
         return true;
     }
   }
@@ -77,8 +77,14 @@
       return;
     }
 
+    const effect = handleEffect('fullName', element);
+
+    if (effect) {
+      return;
+    }
+
     if (renderable('fullName')) {
-      handleEffect('fullName', element) || _config.render.fullName.callback(fullName);
+      _config.render.fullName.handle(fullName);
 
       return;
     }
@@ -102,7 +108,7 @@
 
     if (renderable('information')) {
       information.dobForHuman = dobForHuman;
-      _config.render.information.callback(information);
+      _config.render.information.handle(information);
 
       return;
     }
@@ -115,8 +121,14 @@
     const summary = _config.data?.summary;
     const element = document.getElementById('summary');
 
+    const effect = handleEffect('summary', element);
+
+    if (effect) {
+      return;
+    }
+
     if (renderable('summary')) {
-      handleEffect('summary', element) || _config.render.summary.callback({ summary, element });
+      _config.render.summary.handle({ summary, element });
       return;
     }
 
@@ -131,7 +143,7 @@
     }
 
     if (renderable('contact')) {
-      _config.render.contact.callback(contact);
+      _config.render.contact.handle(contact);
       return;
     }
 
@@ -154,14 +166,14 @@
     }
 
     if (renderable('technicalSkills')) {
-      _config.render.technicalSkills.callback(technicalSkills);
+      _config.render.technicalSkills.handle(technicalSkills);
       return;
     }
 
     for (const skillGroup in technicalSkills) {
       for (const skill of technicalSkills[skillGroup]) {
         if (renderable('technicalSkillItem')) {
-          _config.render.technicalSkillItem.callback({ skillGroup, skill });
+          _config.render.technicalSkillItem.handle({ skillGroup, skill });
           continue;
         }
 
@@ -183,7 +195,7 @@
 
     for (const project of projects) {
       if (renderable('projectItem')) {
-        _config.render.projectItem.callback({ project, parentElement });
+        _config.render.projectItem.handle({ project, parentElement });
         continue;
       }
 
@@ -201,16 +213,15 @@
     }
   }
 
-  function autoType(element, options = {}) {
+  function autoType(section, element, options = {}) {
     let i = 0;
     const cursor = options?.cursor ?? '|';
     let result = cursor;
     let timeout = options?.timeout ?? 100;
-    let key = options?.key;
-    let text = _config.data?.[key];
+    let text = _config.data?.[section];
     let interval;
 
-    if (!key || !text) {
+    if (!text) {
       return;
     }
 
@@ -229,7 +240,7 @@
   }
 
   return {
-    config(options) {
+    setup(options) {
       _config = { ..._config, ...options };
 
       return this;
@@ -239,24 +250,22 @@
 
       return this;
     },
-    render(section, callback) {
-      if (typeof callback === 'string') {
+    render(section, handle) {
+      if (typeof handle === 'string') {
         _config.render[section] = {
-          callback: () => {},
-          effect: callback,
-          options: {
-            key: section,
-          },
+          handle: () => {},
+          effect: handle,
+          options: {},
         };
-      } else if (typeof callback === 'object') {
+      } else if (typeof handle === 'object') {
         _config.render[section] = {
-          callback: () => {},
-          effect: callback?.effect,
-          options: { key: section, ...callback },
+          handle: () => {},
+          effect: handle?.effect,
+          options: { ...handle },
         };
       } else {
         _config.render[section] = {
-          callback,
+          handle,
         };
       }
 
