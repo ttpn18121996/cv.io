@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trinh Tran Phuong Nam</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+      rel="stylesheet"
+    />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body>
+    <div class="w-full flex justify-center py-20">
+      <div class="w-full max-w-5xl px-6">
+        <div class="text-center space-y-1 mb-4">
+          <h1 id="fullName" class="text-4xl text-sky-800 font-bold"></h1>
+          <div id="contact" class="flex md:flex-row flex-col items-center justify-center space-x-2">
+            <a id="phone" class="block text-blue-700 hover:text-blue-500"></a>
+            <span class="md:block hidden">|</span>
+            <a id="email" class="block block text-blue-700 hover:text-blue-500"></a>
+            <span class="md:block hidden">|</span>
+            <a id="linkedin" class="block block text-blue-700 hover:text-blue-500"></a>
+          </div>
+          <div id="address"></div>
+          <div id="dateOfBirth"></div>
+          <div id="gender"></div>
+        </div>
+        <hr />
+        <div class="mt-4">
+          <h2 class="text-2xl text-sky-800 font-semibold">Summary</h2>
+          <div id="summary"></div>
+        </div>
+        <div class="mt-4">
+          <h2 class="text-2xl text-sky-800 font-semibold">Technical skills</h2>
+          <ul class="pl-8 list-disc">
+            <li>
+              <h3 class="font-semibold text-lg">Programming Languages</h3>
+              <ul id="languages" class="pl-8 list-[circle]"></ul>
+            </li>
+            <li>
+              <h3 class="font-semibold text-lg">Database Management Systems</h3>
+              <ul id="databaseManagementSystems" class="pl-8 list-[circle]"></ul>
+            </li>
+            <li>
+              <h3 class="font-semibold text-lg">Framework / Platforms</h3>
+              <ul id="frameworkPlatforms" class="pl-8 list-[circle]"></ul>
+            </li>
+            <li>
+              <h3 class="font-semibold text-lg">Others</h3>
+              <ul id="others" class="pl-8 list-[circle]"></ul>
+            </li>
+          </ul>
+        </div>
+        <div class="mt-4">
+          <h2 class="text-2xl text-sky-800 font-semibold">Projects</h2>
+          <div id="projects"></div>
+        </div>
+      </div>
+    </div>
+    <script src="./scripts/data.js"></script>
+    <script src="./scripts/cv.js"></script>
+    <script src="./scripts/main.js"></script>
+  </body>
+</html>
