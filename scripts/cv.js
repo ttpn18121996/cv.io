@@ -12,6 +12,32 @@
     render: {},
     data: {},
   };
+  const _effects = {
+    autoType(text, element, options = {}) {
+      let i = 0;
+      const cursor = options?.cursor ?? '|';
+      let result = cursor;
+      const timeout = options?.timeout ?? 100;
+      let interval;
+
+      if (!text) {
+        return;
+      }
+
+      interval = setInterval(function () {
+        result = result.replace(new RegExp('\\' + cursor + '$'), '') + text[i] + cursor;
+
+        if (element.innerText.length > text.length) {
+          clearInterval(interval);
+          element.innerText = element.innerText.replace(new RegExp('\\' + cursor + '$'), '');
+          return;
+        }
+
+        element.innerText = result;
+        i++;
+      }, timeout);
+    },
+  };
 
   function getDobFormat(year, month, day) {
     const months = [
@@ -64,7 +90,7 @@
 
     switch (effect) {
       case 'auto_type':
-        autoType(section, element, options);
+        _effects.autoType(_config.data?.[section], element, options);
         return true;
     }
   }
@@ -73,7 +99,7 @@
     const fullName = _config.data?.fullName;
     const element = document.getElementById('fullName');
 
-    if (!fullName) {
+    if (!fullName || !element) {
       return;
     }
 
@@ -84,7 +110,7 @@
     }
 
     if (renderable('fullName')) {
-      _config.render.fullName.handle(fullName);
+      _config.render.fullName.handle({ fullName, effects: { ..._effects } });
 
       return;
     }
@@ -108,13 +134,15 @@
 
     if (renderable('information')) {
       information.dobForHuman = dobForHuman;
-      _config.render.information.handle(information);
+      _config.render.information.handle({ ...information, effects: { ..._effects } });
 
       return;
     }
 
-    document.getElementById('gender').innerText = `Gender: ${information?.gender ?? 'Male'}`;
-    document.getElementById('dateOfBirth').innerHTML = `Date of birth: ${dobForHuman}`;
+    const genderElement = document.getElementById('gender');
+    const dobElement = document.getElementById('dateOfBirth');
+    genderElement && (genderElement.innerText = `Gender: ${information?.gender ?? 'Male'}`);
+    dobElement && (dobElement.innerHTML = `Date of birth: ${dobForHuman}`);
   }
 
   function renderSummary() {
@@ -128,7 +156,7 @@
     }
 
     if (renderable('summary')) {
-      _config.render.summary.handle({ summary, element });
+      _config.render.summary.handle({ summary, element, effects: { ..._effects } });
       return;
     }
 
@@ -143,7 +171,7 @@
     }
 
     if (renderable('contact')) {
-      _config.render.contact.handle(contact);
+      _config.render.contact.handle({ ...contact, effects: { ..._effects } });
       return;
     }
 
@@ -166,14 +194,14 @@
     }
 
     if (renderable('technicalSkills')) {
-      _config.render.technicalSkills.handle(technicalSkills);
+      _config.render.technicalSkills.handle({...technicalSkills, effects: { ..._effects }});
       return;
     }
 
     for (const skillGroup in technicalSkills) {
       for (const skill of technicalSkills[skillGroup]) {
         if (renderable('technicalSkillItem')) {
-          _config.render.technicalSkillItem.handle({ skillGroup, skill });
+          _config.render.technicalSkillItem.handle({ skillGroup, skill, effects: { ..._effects } });
           continue;
         }
 
@@ -195,7 +223,7 @@
 
     for (const project of projects) {
       if (renderable('projectItem')) {
-        _config.render.projectItem.handle({ project, parentElement });
+        _config.render.projectItem.handle({ project, parentElement, effects: { ..._effects } });
         continue;
       }
 
@@ -211,32 +239,6 @@
 
       parentElement.append(projectElement);
     }
-  }
-
-  function autoType(section, element, options = {}) {
-    let i = 0;
-    const cursor = options?.cursor ?? '|';
-    let result = cursor;
-    let timeout = options?.timeout ?? 100;
-    let text = _config.data?.[section];
-    let interval;
-
-    if (!text) {
-      return;
-    }
-
-    interval = setInterval(function () {
-      result = result.replace(new RegExp('\\' + cursor + '$'), '') + text[i] + cursor;
-
-      if (element.innerText.length > text.length) {
-        clearInterval(interval);
-        element.innerText = element.innerText.replace(new RegExp('\\' + cursor + '$'), '');
-        return;
-      }
-
-      element.innerText = result;
-      i++;
-    }, timeout);
   }
 
   return {
