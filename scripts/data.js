@@ -101,8 +101,11 @@ var data = {
         },
       ],
     },
-    // {
-    //     name: '',
-    // },
+    {
+        name: 'This CV',
+        description: 'Generate the cv automatically',
+        technologies: ['HTML/CSS', 'Javascript'],
+        teamSize: 1,
+    },
   ],
 };

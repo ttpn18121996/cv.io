@@ -99,6 +99,8 @@
     const fullName = _config.data?.fullName;
     const element = document.getElementById('fullName');
 
+    document.title = fullName;
+
     if (!fullName || !element) {
       return;
     }
@@ -274,11 +276,14 @@
       return this;
     },
     start() {
-      renderInformation();
-      renderSummary();
-      renderContact();
-      renderTechnicalSkills();
-      renderProjects();
+      setTimeout(function () {
+        document.getElementById('preload').style.opacity = '0';
+        renderInformation();
+        renderSummary();
+        renderContact();
+        renderTechnicalSkills();
+        renderProjects();
+      }, 1000);
     },
   };
 });

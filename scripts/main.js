@@ -26,12 +26,24 @@ MyCv.setup({
     ul.classList.add('pl-8', 'list-disc');
 
     const description = document.createElement('li');
-    effects.autoType(`Description: ${project.description}`, description, { timeout: 10 });
+    effects.autoType(`Description: ${project.description}`, description, { timeout: 50 });
     ul.appendChild(description);
+
+    if (project?.technologies && project.technologies.length) {
+      const technologies = document.createElement('li');
+      effects.autoType(`Technologies: ${project.technologies.join(', ')}`, technologies, { timeout: 50 });
+      ul.appendChild(technologies);
+    }
+
+    if (project?.teamSize) {
+      const teamSize = document.createElement('li');
+      teamSize.innerText = `Team size: ${project.teamSize}`;
+      ul.appendChild(teamSize);
+    }
 
     if (project?.responsibilities) {
       const responsibilities = document.createElement('li');
-      effects.autoType(`Responsibilities: ${project.responsibilities}`, responsibilities, { timeout: 10 });
+      effects.autoType(`Responsibilities: ${project.responsibilities}`, responsibilities, { timeout: 50 });
       ul.appendChild(responsibilities);
     }
 
