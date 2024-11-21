@@ -6,7 +6,7 @@
     background-image: linear-gradient(180deg, transparent, #00ff00);
     width: 50%;
     height: 50%;
-    animation: rotation .5s linear infinite;
+    animation: rotation .75s linear infinite;
 }
 
 @keyframes rotation {
