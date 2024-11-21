@@ -68,6 +68,22 @@ var data = {
         'Responsible for working directly with customers, taking requirements, clarifying requirements, and designing features (as a BA).',
     },
     {
+      name: 'Simple repository package for laravel',
+      description: 'Build repository and service patterns quickly and simply.',
+      technologies: ['PHP', 'Laravel'],
+      teamSize: 1,
+      links: [
+        {
+          label: 'Packagist',
+          url: 'https://packagist.org/packages/ttpn18121996/simple-repository',
+        },
+        {
+          label: 'Github',
+          url: 'https://github.com/ttpn18121996/simple-repository',
+        },
+      ],
+    },
+    {
       name: 'Personal framework',
       description:
         'Building a framework in PHP based on the idea of Laravel aims to study how it works and the necessary conditions for a framework. Learn the nature and application of patterns in solving difficult problems.',
