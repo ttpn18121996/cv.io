@@ -84,6 +84,22 @@ var data = {
       ],
     },
     {
+        name: 'Supporter package',
+        description: 'Package that supports common functions for javascript projects.',
+        technologies: ['Typescript', 'Javascript'],
+        teamSize: 1,
+        links: [
+            {
+                label: 'Npm',
+                url: 'https://www.npmjs.com/package/@noravel/supporter',
+            },
+            {
+                label: 'Github',
+                url: 'https://github.com/ttpn18121996/noravel-supporter',
+            },
+        ]
+    },
+    {
       name: 'Personal framework',
       description:
         'Building a framework in PHP based on the idea of Laravel aims to study how it works and the necessary conditions for a framework. Learn the nature and application of patterns in solving difficult problems.',

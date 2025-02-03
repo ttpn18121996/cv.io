@@ -284,6 +284,10 @@
         renderTechnicalSkills();
         renderProjects();
       }, 1000);
+
+      setTimeout(function () {
+        document.getElementById('preload').remove();
+      }, 1600);
     },
   };
 });
