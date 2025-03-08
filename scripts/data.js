@@ -31,7 +31,7 @@ var data = {
     languages: ['PHP', 'Javascript'],
     databaseManagementSystems: ['MySQL', 'SQLite', 'Postgres'],
     frameworkPlatforms: ['Laravel', 'React/Next.js', 'Vue', 'Jquery', 'Bootstrap', 'Tailwind CSS'],
-    others: ['Git', 'Docker', 'Design pattern', 'SOLID priciples, standard code PSR-12'],
+    others: ['Git', 'Docker', 'AWS', 'Design pattern', 'SOLID priciples, standard code PSR-12'],
   },
   experiences: [
     {
