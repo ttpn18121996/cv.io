@@ -1,4 +1,5 @@
 'use strict';
+
 (function (root, factory) {
   if (typeof define === 'function' && define.amd) {
     define([], factory);
@@ -13,7 +14,7 @@
     data: {},
   };
   const _effects = {
-    autoType(text, element, options = {}) {
+    autoType(text, element, options = { cursor: '|', timeout: 100 }) {
       let i = 0;
       const cursor = options?.cursor ?? '|';
       let result = cursor;
@@ -39,208 +40,90 @@
     },
   };
 
-  function getDobFormat(year, month, day) {
-    const months = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
-    ];
-    month = months[month - 1];
+  function Provider(name) {
+    this.name = name;
 
-    const daySuffix = () => {
-      if (day >= 11 && day <= 13) return 'th';
+    this.getData = function (key = null, defaultValue = null) {
+      return getKey(_config.data, key || this.name, defaultValue);
+    };
 
-      switch (day % 10) {
-        case 1:
-          return 'st';
-        case 2:
-          return 'nd';
-        case 3:
-          return 'rd';
-        default:
-          return 'th';
+    this.getElement = function () {
+      return document.getElementById(this.name);
+    };
+
+    this.getDobFormat = function (year, month, day) {
+      const months = [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December',
+      ];
+      month = months[month - 1];
+
+      const daySuffix = () => {
+        if (day >= 11 && day <= 13) return 'th';
+
+        switch (day % 10) {
+          case 1:
+            return 'st';
+          case 2:
+            return 'nd';
+          case 3:
+            return 'rd';
+          default:
+            return 'th';
+        }
+      };
+
+      return `${month} ${day}<sup>${daySuffix()}</sup>, ${year}`;
+    };
+
+    this.call = function (section) {
+      if (renderable(section)) {
+        _config.render[section](new Provider(section));
+        delete _config.render[section];
       }
     };
 
-    return `${month} ${day}<sup>${daySuffix()}</sup>, ${year}`;
+    this.effect = function (effect, args) {
+      switch (effect) {
+        case 'auto_type':
+          _effects.autoType(...args);
+          return true;
+      }
+    }
+
+    this.handleEffect = function (effect, options) {
+      const element = this.getElement();
+
+      if (!effect && !element) {
+        return;
+      }
+
+      this.effect(effect, [this.getData(), element, options]);
+    }
+  }
+
+  function getKey(obj, keys, defaultValue = null) {
+    let result = obj;
+    keys.split('.').forEach((key) => {
+      result = result?.[key];
+    });
+    return result ?? defaultValue;
   }
 
   function renderable(section) {
-    const handle = _config.render?.[section]?.handle;
+    const handle = _config.render?.[section];
 
     return handle && typeof handle === 'function';
-  }
-
-  function handleEffect(section, element) {
-    const effect = _config.render?.[section]?.effect;
-    const options = _config.render?.[section]?.options ?? {};
-
-    if (!effect) {
-      return false;
-    }
-
-    switch (effect) {
-      case 'auto_type':
-        _effects.autoType(_config.data?.[section], element, options);
-        return true;
-    }
-  }
-
-  function renderName() {
-    const fullName = _config.data?.fullName;
-    const element = document.getElementById('fullName');
-
-    document.title = fullName;
-
-    if (!fullName || !element) {
-      return;
-    }
-
-    const effect = handleEffect('fullName', element);
-
-    if (effect) {
-      return;
-    }
-
-    if (renderable('fullName')) {
-      _config.render.fullName.handle({ fullName, effects: { ..._effects } });
-
-      return;
-    }
-
-    element.innerText = fullName;
-  }
-
-  function renderInformation() {
-    const information = _config.data?.information;
-
-    renderName();
-
-    if (!information) {
-      return;
-    }
-
-    let year = _config.data?.information?.dateOfBirth?.year ?? new Date().getFullYear();
-    let month = _config.data?.information?.dateOfBirth?.month ?? new Date().getMonth() + 1;
-    let day = _config.data?.information?.dateOfBirth?.day ?? new Date().getDate();
-    const dobForHuman = getDobFormat(year, month, day);
-
-    if (renderable('information')) {
-      information.dobForHuman = dobForHuman;
-      _config.render.information.handle({ ...information, effects: { ..._effects } });
-
-      return;
-    }
-
-    const genderElement = document.getElementById('gender');
-    const dobElement = document.getElementById('dateOfBirth');
-    genderElement && (genderElement.innerText = `Gender: ${information?.gender ?? 'Male'}`);
-    dobElement && (dobElement.innerHTML = `Date of birth: ${dobForHuman}`);
-  }
-
-  function renderSummary() {
-    const summary = _config.data?.summary;
-    const element = document.getElementById('summary');
-
-    const effect = handleEffect('summary', element);
-
-    if (effect) {
-      return;
-    }
-
-    if (renderable('summary')) {
-      _config.render.summary.handle({ summary, element, effects: { ..._effects } });
-      return;
-    }
-
-    element.innerHTML = _config.data?.summary ?? '';
-  }
-
-  function renderContact() {
-    const contact = _config.data?.contact;
-
-    if (!contact) {
-      return;
-    }
-
-    if (renderable('contact')) {
-      _config.render.contact.handle({ ...contact, effects: { ..._effects } });
-      return;
-    }
-
-    for (const contactKey in contact) {
-      const element = document.getElementById(contactKey);
-      if (!element) {
-        continue;
-      }
-
-      element.innerText = contact[contactKey]['label'];
-      element.setAttribute('href', contact[contactKey]['link']);
-    }
-  }
-
-  function renderTechnicalSkills() {
-    const technicalSkills = _config.data?.technicalSkills;
-
-    if (!technicalSkills) {
-      return;
-    }
-
-    if (renderable('technicalSkills')) {
-      _config.render.technicalSkills.handle({...technicalSkills, effects: { ..._effects }});
-      return;
-    }
-
-    for (const skillGroup in technicalSkills) {
-      for (const skill of technicalSkills[skillGroup]) {
-        if (renderable('technicalSkillItem')) {
-          _config.render.technicalSkillItem.handle({ skillGroup, skill, effects: { ..._effects } });
-          continue;
-        }
-
-        const div = document.createElement('div');
-        div.innerText = skill;
-        document.getElementById(skillGroup).appendChild(div);
-      }
-    }
-  }
-
-  function renderProjects() {
-    const projects = _config.data?.projects;
-
-    if (!projects) {
-      return;
-    }
-
-    const parentElement = document.getElementById('projects');
-
-    for (const project of projects) {
-      if (renderable('projectItem')) {
-        _config.render.projectItem.handle({ project, parentElement, effects: { ..._effects } });
-        continue;
-      }
-
-      const projectElement = document.createElement('div');
-      const name = document.createElement('h3');
-      name.innerText = project.name;
-
-      const description = document.createElement('div');
-      description.innerText = `Description: ${project.description}`;
-
-      projectElement.appendChild(name);
-      projectElement.appendChild(description);
-
-      parentElement.append(projectElement);
-    }
   }
 
   return {
@@ -254,40 +137,25 @@
 
       return this;
     },
-    render(section, handle) {
-      if (typeof handle === 'string') {
-        _config.render[section] = {
-          handle: () => {},
-          effect: handle,
-          options: {},
-        };
-      } else if (typeof handle === 'object') {
-        _config.render[section] = {
-          handle: () => {},
-          effect: handle?.effect,
-          options: { ...handle },
-        };
+    render(section, handler) {
+      if (typeof handler === 'string') {
+        _config.render[section] = provider => provider.handleEffect(handler, { timeout: 10 });
       } else {
-        _config.render[section] = {
-          handle,
-        };
+        _config.render[section] = handler;
       }
 
       return this;
     },
+
     start() {
       setTimeout(function () {
         document.getElementById('preload').style.opacity = '0';
-        renderInformation();
-        renderSummary();
-        renderContact();
-        renderTechnicalSkills();
-        renderProjects();
+        for (const section in _config.render) {
+          if (renderable(section)) {
+            _config.render[section](new Provider(section));
+          }
+        }
       }, 1000);
-
-      setTimeout(function () {
-        document.getElementById('preload').remove();
-      }, 1600);
     },
   };
 });

@@ -33,11 +33,28 @@ var data = {
     frameworkPlatforms: ['Laravel', 'React/Next.js', 'Vue', 'Jquery', 'Bootstrap', 'Tailwind CSS'],
     others: ['Git', 'Docker', 'Design pattern', 'SOLID priciples, standard code PSR-12'],
   },
+  experiences: [
+    {
+      name: 'WAO',
+      from: 2017,
+      to: 2020,
+    },
+    {
+      name: 'International Digital Services Vietnam',
+      from: 2020,
+      to: 2022,
+    },
+    {
+      name: 'Voyager',
+      from: 2022,
+      to: null,
+    },
+  ],
   projects: [
     {
       name: 'Sunnyview (PHP Laravel, PostgreSQL, AWS SDK, Bootstrap, Jquery, Vue)',
       description:
-        'Manage and provide AWS services to corporate customers (EC2, RDS, …). Helping customers build environments and uses AWS services.',
+        'Provide comprehensive support for application development on AWS, building AWS environment, deployment and operation support.',
       technologies: ['PHP Laravel', 'PostgreSQL', 'AWS SDK', 'Bootstrap', 'Jquery', 'Vue'],
       teamSize: 5,
       responsibilities:
