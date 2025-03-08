@@ -43,14 +43,32 @@
   function Provider(name) {
     this.name = name;
 
+    /**
+     * Get data from data in config by key. If key is null, get data from data in config by name.
+     *
+     * @param {string} key
+     * @param {string} defaultValue
+     * @returns {any}
+     */
     this.getData = function (key = null, defaultValue = null) {
       return getKey(_config.data, key || this.name, defaultValue);
     };
 
+    /**
+     * Get element by name.
+     */
     this.getElement = function () {
       return document.getElementById(this.name);
     };
 
+    /**
+     * Get date in format Month day, year
+     * 
+     * @param {number} year
+     * @param {number} month
+     * @param {number} day
+     * @returns {string}
+     */
     this.getDobFormat = function (year, month, day) {
       const months = [
         'January',
@@ -93,6 +111,13 @@
       }
     };
 
+    /**
+     * Run effect
+     *
+     * @param {string} effect
+     * @param {any[]} args
+     * @returns {boolean}
+     */
     this.effect = function (effect, args) {
       switch (effect) {
         case 'auto_type':
@@ -101,6 +126,13 @@
       }
     }
 
+    /**
+     * Run effect with default data and element.
+     *
+     * @param {string} effect
+     * @param {any[]} args
+     * @returns {boolean}
+     */
     this.handleEffect = function (effect, options) {
       const element = this.getElement();
 
@@ -139,7 +171,7 @@
     },
     render(section, handler) {
       if (typeof handler === 'string') {
-        _config.render[section] = provider => provider.handleEffect(handler, { timeout: 10 });
+        _config.render[section] = provider => provider.handleEffect(handler, { timeout: 100 });
       } else {
         _config.render[section] = handler;
       }
