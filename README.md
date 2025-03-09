@@ -61,3 +61,14 @@ const elm = document.createElement('div');
 provider.effect('auto_type', ['Hello world', elm, { timeout: 50, cursor: '_' }]);
 ...
 ```
+
+### Fade
+
+This method adjust the opacity of elements.
+
+```js
+...
+const elm = document.createElement('div');
+provider.effect('fade', [elm, { timeout: 1000 }]);
+...
+```
