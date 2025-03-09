@@ -15,6 +15,9 @@ MyCv.setup({ data })
     const dobElement = document.getElementById('dateOfBirth');
     genderElement && (genderElement.innerText = `Gender: ${gender}`);
     dobElement && (dobElement.innerHTML = `Date of birth: ${dobForHuman}`);
+
+    const element = provider.getElement();
+    provider.effect('fade', [element, { timeout: 4000 }]);
   })
   .render('contact', provider => {
     const data = provider.getData();
@@ -31,8 +34,13 @@ MyCv.setup({ data })
       }
 
       element.innerText = data[contact]['label'];
-      element.setAttribute('href', data[contact]['link']);
+      if (data[contact]['link']) {
+        element.setAttribute('href', data[contact]['link']);
+      }
     }
+
+    const element = provider.getElement();
+    provider.effect('fade', [element, { timeout: 4000 }]);
   })
   .render('summary', provider => provider.handleEffect('auto_type', { timeout: 10 }))
   .render('technicalSkills', provider => {
@@ -49,6 +57,9 @@ MyCv.setup({ data })
         document.getElementById(skillGroup).appendChild(li);
       }
     }
+
+    const element = provider.getElement();
+    provider.effect('fade', [element, { timeout: 4000 }]);
   })
   .render('experiences', provider => {
     const data = provider.getData();
@@ -62,6 +73,9 @@ MyCv.setup({ data })
       li.innerHTML = `<strong>${experience.name}</strong> (${experience.from} - ${experience.to || 'Present'})`;
       document.getElementById('experiences').appendChild(li);
     }
+
+    const element = provider.getElement();
+    provider.effect('fade', [element, { timeout: 4000 }]);
   })
   .render('projects', provider => {
     const data = provider.getData();
