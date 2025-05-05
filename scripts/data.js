@@ -130,7 +130,7 @@ var data = {
         },
         {
           label: 'Github',
-          url: 'https://github.com/ttpn18121996/noravel',
+          url: 'https://github.com/ttpn18121996?tab=repositories&q=noravel&type=&language=&sort=',
         },
       ],
     },
