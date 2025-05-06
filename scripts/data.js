@@ -101,19 +101,19 @@ var data = {
       ],
     },
     {
-      name: 'Personal framework',
+      name: 'Historical records package for laravel',
       description:
-        'Building a framework in PHP based on the idea of Laravel aims to study how it works and the necessary conditions for a framework. Learn the nature and application of patterns in solving difficult problems.',
+        'Record the history of activities affecting the database in a simple way.',
       technologies: ['PHP'],
       teamSize: 1,
       links: [
         {
           label: 'Packagist',
-          url: 'https://packagist.org/packages/brightmoon/framework',
+          url: 'https://packagist.org/packages/ttpn18121996/historical-records',
         },
         {
           label: 'Github',
-          url: 'https://github.com/ttpn18121996/framework',
+          url: 'https://github.com/ttpn18121996/historical-records',
         },
       ],
     },
